@@ -2,11 +2,13 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 import seedUsers from './seed-files/users';
-import seedProducts from './seed-files/products';
+import seedAssets from './seed-files/assets';
+import seedTeams from './seed-files/teams';
 
 async function main() {
-  await seedProducts()
+  await seedAssets()
   await seedUsers()
+  await seedTeams()
 }
 
 main()

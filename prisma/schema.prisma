@@ -18,16 +18,66 @@ model user {
   name          String
   email         String  @unique
   passwordHash  String
+  description   String
   refresh_token String
   is_active     Boolean @default(true)
+  assetId       Int
+  asset         asset   @relation(fields: [assetId], references: [id])
+
+  teams    team[]
+  ratings  rating[]
+  bookings booking[]
 }
 
-model product {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String   @db.Text
-  price       Decimal  @db.Decimal(10, 2)
-  stock       Int
-  is_active   Boolean  @default(true)
-  created     DateTime @default(now())
+model team {
+  id              Int    @id @default(autoincrement())
+  name            String
+  description     String @db.Text
+  day             String
+  time            String
+  max_participant Int
+  userId          Int
+  assetId         Int
+
+  user     user      @relation(fields: [userId], references: [id])
+  asset    asset     @relation(fields: [assetId], references: [id])
+  ratings  rating[]
+  bookings booking[]
+
+  @@map("teams")
+}
+
+model asset {
+  id  Int    @id @default(autoincrement())
+  url String
+
+  users user[]
+  teams team[]
+
+  @@map("assets")
+}
+
+model rating {
+  id        Int @id @default(autoincrement())
+  teamId    Int
+  userId    Int
+  numStars Int
+
+  team team @relation(fields: [teamId], references: [id])
+  user user @relation(fields: [userId], references: [id])
+
+  @@unique([userId, teamId])
+  @@map("ratings")
+}
+
+model booking {
+  id     Int @id @default(autoincrement())
+  userId Int
+  teamId Int
+
+  user user @relation(fields: [userId], references: [id])
+  team team @relation(fields: [teamId], references: [id])
+
+  @@unique([userId, teamId])
+  @@map("bookings")
 }
