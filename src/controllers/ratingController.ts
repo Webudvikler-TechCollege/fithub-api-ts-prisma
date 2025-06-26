@@ -4,6 +4,7 @@ import { prisma } from '../prisma.js';
 export const getAvgStarsByTeamId = async (req: Request, res: Response) => {
   const { teamId } = req.params
 
+  
   try {
     const ratings = await prisma.rating.aggregate({
       where: {
