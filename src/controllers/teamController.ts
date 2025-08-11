@@ -6,7 +6,12 @@ export const getRecords = async (req: Request, res: Response) => {
     const data = await prisma.team.findMany({
       select: {
         id: true,
-        name: true
+        name: true,
+        asset: {
+          select: {
+            url: true
+          }
+        }
       }
     });
     res.json(data);
