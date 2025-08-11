@@ -8,7 +8,12 @@ export const getRecords = async (req: Request, res: Response) => {
       select: {
         id: true,
         name: true,
-        email: true
+        email: true,
+        asset: {
+          select: {
+              url: true
+          }
+        }
       }
     });
     res.json(users);
