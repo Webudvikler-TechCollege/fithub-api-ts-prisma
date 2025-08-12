@@ -27,29 +27,29 @@ const generateToken = (
 const authenticateUser = async (username: string, password: string) => {
 
     const user = await prisma.user.findUnique({
-        where: { email: username, is_active: true },
+        where: { email: username, isActive: true },
         select: {
             id: true,
             name: true,
-            passwordHash: true,
-            is_active: true
+            password: true,
+            isActive: true
         }
     });
 
     if (!user) return null;
 
-    const isMatch = await bcrypt.compare(password, user.passwordHash);
+    const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) return null;
 
-    const refresh_token = generateToken(user, "refresh");
-    const access_token = generateToken(user, "access");
+    const refreshToken = generateToken(user, "refresh");
+    const accessToken = generateToken(user, "access");
 
     try {
         await prisma.user.update({
             where: { id: user.id },
             data: {
-                refresh_token
+                refreshToken
             }
         });
     } catch (error) {
@@ -57,19 +57,19 @@ const authenticateUser = async (username: string, password: string) => {
     }
 
     return {
-        access_token,
-        refresh_token,
+        accessToken,
+        refreshToken,
         user: { id: user.id, name: user.name },
     };
 };
 
-const verifyRefreshToken = async (refresh_token: string) => {
+const verifyRefreshToken = async (refreshToken: string) => {
     const user = await prisma.user.findFirst({
-        where: { refresh_token }
+        where: { refreshToken }
     });
     if (!user) return null;
 
-    jwt.verify(refresh_token, process.env.TOKEN_REFRESH_KEY!); // will throw if invalid
+    jwt.verify(refreshToken, process.env.TOKEN_REFRESH_KEY!); // will throw if invalid
     const access_token = generateToken(user, "access");
     return access_token;
 };

@@ -7,7 +7,7 @@ export const getRecords = async (req: Request, res: Response) => {
       select: {
         id: true,
         name: true,
-        asset: {
+        image: {
           select: {
             url: true
           }
@@ -29,10 +29,15 @@ export const getRecord = async (req: Request, res: Response) => {
       include: {
         user: {
           select: {
-            name: true
+            name: true,
+            image: {
+              select: {
+                url: true
+              }
+            }
           }
         },
-        asset: {
+        image: {
           select: {
             url:true
           }

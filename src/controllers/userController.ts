@@ -9,7 +9,7 @@ export const getRecords = async (req: Request, res: Response) => {
         id: true,
         name: true,
         email: true,
-        asset: {
+        image: {
           select: {
               url: true
           }
@@ -33,8 +33,8 @@ export const getRecord = async (req: Request, res: Response) => {
         name: true,
         description: true,
         email:true,
-        is_active: true,
-        asset: {
+        isActive: true,
+        image: {
           select: {
             url: true
           }
@@ -49,24 +49,26 @@ export const getRecord = async (req: Request, res: Response) => {
 };
 
 export const createRecord = async (req: Request, res: Response) => {
-  const { name, email, passwordHash, refresh_token, is_active } = req.body;
+  const { name, email, password, description, refreshToken, imageId, isActive } = req.body;
 
-  if (!email || !passwordHash) {
+  if (!email || !password) {
     res.status(400).json({ error: 'Email and password are required' });
   }
 
   const isActiveParsed =
-    is_active === 'true' || is_active === true || is_active === 1 || is_active === '1';
+    isActive === 'true' || isActive === true || isActive === 1 || isActive === '1';
 
   try {
-    const hashedPassword = await bcrypt.hash(passwordHash, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
       data: {
         name,
         email,
-        passwordHash: hashedPassword,
-        refresh_token,
-        is_active: isActiveParsed,
+        password: hashedPassword,
+        description: description,
+        refreshToken,
+        imageId: Number(imageId),
+        isActive: isActiveParsed,
       },
     });
     res.status(201).json(user);
@@ -78,22 +80,24 @@ export const createRecord = async (req: Request, res: Response) => {
 
 export const updateRecord = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { name, email, passwordHash, refresh_token, is_active } = req.body;
+  const { name, email, password, description, refreshToken, isActive, imageId } = req.body;
 
   const isActiveParsed =
-    is_active === 'true' || is_active === true || is_active === 1 || is_active === '1';
+    isActive === 'true' || isActive === true || isActive === 1 || isActive === '1';
 
   try {
     const dataToUpdate: any = {
       name,
       email,
-      refresh_token,
-      is_active: isActiveParsed,
+      description,
+      refreshToken,
+      imageId: Number(imageId),
+      isActive: isActiveParsed,
     };
 
     // Hash password only if provided
-    if (passwordHash) {
-      dataToUpdate.passwordHash = await bcrypt.hash(passwordHash, 10);
+    if (password) {
+      dataToUpdate.password = await bcrypt.hash(password, 10);
     }
 
     const user = await prisma.user.update({

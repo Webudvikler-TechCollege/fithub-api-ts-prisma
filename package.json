@@ -1,5 +1,5 @@
 {
-  "name": "prisma",
+  "name": "fithub2025",
   "version": "1.0.0",
   "description": "",
   "main": "index.ts",
@@ -8,19 +8,21 @@
     "dev": "tsx --watch src/index.ts",
     "init": "prisma migrate dev && prisma db seed",
     "push": "prisma db push && prisma db seed",
-    "reset": "prisma migrate reset",
     "prepare": "prisma generate",
     "migrate": "prisma migrate dev",
+    "reset": "prisma migrate reset",
     "seed": "prisma db seed"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^6.10.1",
+    "@prisma/client": "^6.11.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
+    "csv-parse": "^5.6.0",
     "express": "^5.1.0",
+    "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "path": "^0.12.7"
   },
@@ -34,7 +36,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.0.3",
     "dotenv": "^16.5.0",
-    "prisma": "^6.10.1",
+    "prisma": "^6.11.0",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
   }
