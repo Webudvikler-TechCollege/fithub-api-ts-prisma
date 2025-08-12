@@ -11,6 +11,13 @@ export const getRecords = async (req: Request, res: Response) => {
           select: {
             url: true
           }
+        },
+        ratings: {
+          select: {
+            id: true,
+            numStars: true,
+            userId: true
+          }
         }
       }
     });
@@ -40,6 +47,13 @@ export const getRecord = async (req: Request, res: Response) => {
         image: {
           select: {
             url:true
+          }
+        },
+        ratings: {
+          select: {
+            id: true,
+            numStars: true,
+            userId: true
           }
         }
       }
